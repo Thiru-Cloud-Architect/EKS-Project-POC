@@ -1,58 +1,46 @@
 # EKS Microservices Project
 
-This project demonstrates a full CI/CD setup using AWS EKS, Terraform, GitHub Actions, and Helm.
+This is an end-to-end microservices deployment stack using AWS EKS, Terraform, Helm, and GitHub Actions CI/CD.
 
-## 🔧 Structure
+## Structure
 
-```
-eks-microservices-project/
-├── terraform/
-│   ├── vpc/
-│   ├── eks/
-│   └── iam/
-├── helm-charts/
-│   ├── ingress-nginx/
-│   ├── cert-manager/
-│   └── prometheus-grafana/
-├── k8s-manifests/
-│   ├── frontend/
-│   ├── backend/
-│   └── database/
-├── .github/workflows/
-│   └── deploy.yml
-└── README.md
-```
+- `terraform/`: VPC, IAM roles, and EKS cluster provisioning
+- `helm-charts/`: Base Helm setups like Ingress, Cert Manager, and Monitoring
+- `k8s-manifests/`: Application-level Kubernetes objects
+- `.github/workflows/`: GitHub Actions pipeline to deploy on commit
 
-## 🛠 Setup Instructions
+## Setup Instructions
 
-1. **Terraform Setup:**
+1. **Provision Infrastructure**
 ```bash
 cd terraform/vpc && terraform apply
 cd ../iam && terraform apply
 cd ../eks && terraform apply
 ```
 
-2. **Helm Installations:**
+2. **Install Helm Charts**
 ```bash
-helm install ingress-nginx helm-charts/ingress-nginx
-helm install cert-manager helm-charts/cert-manager
-helm install prometheus-grafana helm-charts/prometheus-grafana
+helm upgrade --install ingress-nginx helm-charts/ingress-nginx
+helm upgrade --install cert-manager helm-charts/cert-manager
+helm upgrade --install prometheus-grafana helm-charts/prometheus-grafana
 ```
 
-3. **Kubernetes Deployment:**
+3. **Deploy Microservices**
 ```bash
 kubectl apply -f k8s-manifests/
 ```
 
-4. **CI/CD:**
-Push to `main` triggers GitHub Actions deploy pipeline.
+4. **Enable GitHub Actions**
+Push changes to the `main` branch to trigger the pipeline in `.github/workflows/deploy.yml`.
 
-## 📊 Monitoring and Ingress
+## Monitoring
+- Prometheus and Grafana deployed using Helm
+- Access Grafana at `/grafana` on the Ingress hostname
 
-- Ingress: `ingress-nginx`
-- SSL: `cert-manager`
-- Monitoring: `prometheus-grafana`
+## Service Discovery
+- Kubernetes native (CoreDNS)
+- Services communicate via `service.namespace.svc.cluster.local`
 
 ---
 
-Built for learning and real-world use. 🚀
+Happy shipping! 

@@ -30,10 +30,11 @@ resource "aws_security_group" "rds" {
   }
 }
 
+# RDS Db for EKS - App's database layer
 resource "aws_db_instance" "main" {
   identifier             = var.db_name
   allocated_storage      = var.allocated_storage
-  storage_type          = "gp2"
+  storage_type          = "gp3"
   engine                = var.engine
   engine_version        = var.engine_version
   instance_class        = var.instance_class
